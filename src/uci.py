@@ -13,10 +13,9 @@ import argparse
 import tools
 #import sunfish
 import customEngine
-
 from tools import WHITE, BLACK, Unbuffered
 
-def main():
+def main(eng):
     parser = argparse.ArgumentParser()
     parser.add_argument('module', help='chessEngine.py file (without .py)', type=str, default='crapbox', nargs='?')
     args = parser.parse_args()
@@ -118,7 +117,10 @@ def main():
             start = time.time()
             ponder = None
             renderedFen = tools.renderFEN(pos)
+            '''
             eng = customEngine.Engine()
+            currMove = str(eng.getRandomMove(renderedFen))
+            '''
             currMove = str(eng.getMove(renderedFen))
             output("info currmove " + currMove)
             time.sleep(0.1)
@@ -140,4 +142,5 @@ def main():
             pass
 
 if __name__ == '__main__':
-    main()
+    engine = customEngine.Engine()
+    main(engine)

@@ -9,7 +9,7 @@ import sys
 import time
 import logging
 import argparse
-
+import cristiceps
 import tools
 #import sunfish
 import customEngine
@@ -54,7 +54,7 @@ def main(eng):
             break
 
         elif smove == 'uci':
-            output('id name Crapbox')
+            output('id name Cristiceps')
             output('id author Benjamin Christie')
             output('uciok')
 
@@ -142,5 +142,5 @@ def main(eng):
             pass
 
 if __name__ == '__main__':
-    engine = customEngine.Engine()
+    engine = cristiceps.CristicepsEngine()
     main(engine)

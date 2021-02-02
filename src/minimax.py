@@ -3,14 +3,14 @@ import chess
 import chess.pgn
 from customEngine import Engine
 i = 0
-class MiniMax:
+class MiniMax():
     # assuming gametree is a game in
-    def __init__(self, engine=Engine(), gametree=chess.pgn.Game(), color=chess.WHITE):
+    def __init__(self, engine=Engine(), engineColor=chess.WHITE, gametree=chess.pgn.Game()):
         self.gametree = gametree
         self.parentNode = gametree.parent
         self.currentNode = None
         self.successors = []
-        self.color = color
+        self.color = engineColor
         self.engine = engine
 
     def getSuccessorsFromFEN(self, fen):
@@ -37,13 +37,13 @@ class MiniMax:
             if( value > bestMove):
                 bestMove = value
                 bestMoveFinal = move
-                print("info score " ,str(bestMove))
-                print("info currmove ",str(bestMoveFinal))
+                print("info score cp" ,str(bestMove))
+                print("info currmove",str(bestMoveFinal))
         return bestMoveFinal
 
     def minimax(self, depth, board, alpha, beta, is_maximizing):
         if(depth == 0):
-            return -self.engine.evaluation(board)
+            return -self.engine.evaluation(board, self.color)
         possibleMoves = board.legal_moves
         if(is_maximizing):
             bestMove = -999999999999

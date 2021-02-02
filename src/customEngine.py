@@ -7,7 +7,7 @@ import threading
 import logging
 import os
 
-class Engine:
+class Engine():
     piece = { 'P': 100, 'N': 280, 'B': 320, 'R': 479, 'Q': 929, 'K': 60000 , '': 0, ' ': 0}
     PST = {
     'B' : [-40, -20, -20, -20, -20, -20, -20, -40 ,
@@ -62,29 +62,34 @@ class Engine:
       ' ' : [0] *64
     }
 
-    def __init__(self):
-        pass
+    def __init__(self, engineColor):
+        self.engineColor = engineColor
 
     # position is from 0 to 63, from top left corner
-    def evalPiecePosition(self, pieceStr, position):
-        if pieceStr.isupper(): # white
+    def evalPiecePosition(self, pieceStr, position, perspectiveColor):
+        if pieceStr.isupper() and perspectiveColor == chess.WHITE: # white
             return Engine.piece[pieceStr] * Engine.PST[pieceStr][position]
+        elif pieceStr.isupper() and perspectiveColor == chess.BLACK:
+            return -Engine.piece[pieceStr] * Engine.PST[pieceStr][position]
+        elif pieceStr.islower() and perspectiveColor == chess.WHITE:
+            pieceStr = pieceStr.upper()
+            return -Engine.piece[pieceStr] * Engine.PST[pieceStr][position]
         else: # black
             pieceStr = pieceStr.upper()
-            position = (position + 56 - int( position / 8 ) * 16)
+            #position = (position + 56 - int( position / 8 ) * 16)
             return Engine.piece[pieceStr] * Engine.PST[pieceStr][position]
 
-    def evalPosition(self, fen):
+    def evalPosition(self, fen, perspectiveColor):
         eval = 0
         arr = self.fen2array(fen)
         for n in range(len(arr)):
-            eval = self.evalPiecePosition(arr[n], n) + eval
+            eval+=self.evalPiecePosition(arr[n], n, perspectiveColor)
         return eval
 
-    def evaluation(self, board):
+    def evaluation(self, board, perspectiveColor):
         #os.system("cls") if os.name=="nt" else os.system("clear")
         #print(board)
-        return self.evalPosition(board.fen())
+        return self.evalPosition(board.fen(), perspectiveColor)
 
     def fen2array(self, fen):
         old_board = fen.split('/')
